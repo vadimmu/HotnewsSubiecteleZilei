@@ -23,6 +23,8 @@ WORDS_NOT_COUNTED = ['sa', 'din', 'in', 'si', 'pentru', 'deci', 'in', 'ca', 'cu'
                     'sunt', 'esti', 'este', 'suntem', 'sunteti', 'sunt',
                     'am', 'ai', 'are', 'avem', 'aveti', 'au', 'a', 'ati',
                     'pe', 'video', 'care', 'mai', 'fost', 'va', 'se', 'o', 'un','al', 'ar', 'fi', 'putea', 'nu', 'da']
+RESULTS_NUMBER = 5
+RESULTS_DICT_FILE = 'hotnews.csv'
 
 def replace_all(text, dic):
     for i, j in dic.iteritems():
@@ -114,7 +116,7 @@ def get_article_text(page_address):
 def save_pages_contents(pages_contents):
 
     for page in pages_contents:
-        with codecs.open('hotnews.csv', 'a', 'utf-8') as f:
+        with codecs.open(RESULTS_DICT_FILE, 'a', 'utf-8') as f:
             line = unicode(page)
             f.write(line + '\n')
 
@@ -147,7 +149,7 @@ def get_page_infos():
 
     sorted_tokens = []
 
-    with open('hotnews.csv') as f:
+    with open(RESULTS_DICT_FILE) as f:
         for line in f:
             page_dict = ast.literal_eval(line)
             page_tokens = process_info(page_dict)
@@ -167,7 +169,7 @@ def get_titles_for_token(token):
 
     titles = []
     print("getting the titles for the token: " + token)
-    with open('hotnews.csv') as f:
+    with open(RESULTS_DICT_FILE) as f:
         for line in f:
             page_dict = ast.literal_eval(line)
             title_string = page_dict['content']['title']
@@ -182,13 +184,13 @@ def get_titles_for_token(token):
 
 if __name__ == '__main__':
     print("Scrape started")
-    if not os.path.isfile('hotnews.csv'):
+    if not os.path.isfile(RESULTS_DICT_FILE):
         pages_contents = scrap_all_pages()
         save_pages_contents(pages_contents)
 
 
     sorted_tokens = get_page_infos()
-    for i in range(0, 5):
+    for i in range(0, RESULTS_NUMBER):
         print("================================================")
         print(sorted_tokens[i])
 
@@ -200,8 +202,3 @@ if __name__ == '__main__':
             print("TITLE: " + unicode(title))
 
         print("================================================")
-
-
-
-
-
